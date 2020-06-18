@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-void main() async {
 
-WidgetsFlutterBinding.ensureInitialized();
-await FlutterDownloader.initialize(
-  debug: true // printing logs to console
-);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true // printing logs to console
+      );
 
   runApp(MyApp());
-
-
-
-
 }
 
 class MyApp extends StatelessWidget {
@@ -54,28 +49,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text('Click to Download'),
+            SizedBox(height: 10),
             SizedBox(
               width: 150,
               height: 50,
               child: FlatButton(
                 onPressed: () async {
-                  final userStatus=  await Permission.storage.request();
+                  final userStatus = await Permission.storage.request();
 
-if(userStatus.isGranted){
-  // download part
-  
-final extDir = await getExternalStorageDirectory();
- FlutterDownloader.enqueue(url: "https://drive.google.com/u/0/uc?id=1K2_0tPQrX5e59l9vrBeSwiIqAdU7MROh&export=download", savedDir: extDir.path,
-  fileName: "Swaraj.jpg",
-  showNotification: true,
-  openFileFromNotification: true);
-  
-} else{
+                  if (userStatus.isGranted) {
+                    // download part
+
+                    final extDir = await getExternalStorageDirectory();
+                    FlutterDownloader.enqueue(
+                        url:
+                            "https://drive.google.com/u/0/uc?id=1K2_0tPQrX5e59l9vrBeSwiIqAdU7MROh&export=download",
+                        savedDir: extDir.path,
+                        fileName: "Swaraj.jpg",
+                        showNotification: true,
+                        openFileFromNotification: true);
+                  } else {
 // can't download
-print('Permission Denied');
-
-}
-
+                    print('Permission Denied');
+                  }
                 },
                 child: Text('Download'),
                 color: Colors.green,
